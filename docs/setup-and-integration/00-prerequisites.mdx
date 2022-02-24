@@ -1,0 +1,41 @@
+---
+title: Design and create documents
+---
+
+:::info
+
+Behind the scenes, *IWS* uses *SAMLight*'s *CCI (Client Control Interface)* to handle the engraving process. 
+For this reason during system configuration we will be required to upload *SJF (SCAPS Job Format) files*, which 
+can be created using *SCAPS SAMLight*. 
+
+This is a very quick introduction to SAMLight's job editor the concept of *Entities*, *Pens* and *SJF Files*. 
+If you're already familiar with *SCAPS SAMLight* feel free to [skip this section](./configure-job-templates).
+
+:::
+
+## SCAPS SAMLight
+
+**SCAPS SAMLight** is a **WYSIWYG editor** for scanner applications. Users can design and execute laser engraving **Jobs** using a graphical interface. 
+
+
+import samlight from '../../static/img/scaps/job-editor.png'
+
+<img src={samlight} />
+
+### Entities
+
+Individual elements of the design (text, barcodes, images, shapes) are called **Entities**. 
+Each entity is associated with a **Pen**
+
+### Pens
+
+Pen settings (`Mark` tab on the right panel), allow users to setup parameters such as laser power, frequency, scan speed and much more.
+Pens can be tweaked to find a balance between performance and printing quaility that matches application's requirements. Ideal parameters selection dependes on many factors and is a topic out of the scope of this guide. 
+
+### Marking 
+
+SAMLight integrates directly with **SCAPS USC-1** board, which controls laser power and drives the scan head during the engraving process. Users can start the marking process from SAMLight's interface. 
+
+### SJF Files
+
+Jobs created with SAMLight can be saved as `.sjf` (SCAPS Job Format) files. IWS manages SJF files and interfaces with SAMLight via CCI interface to handle the engraving process.

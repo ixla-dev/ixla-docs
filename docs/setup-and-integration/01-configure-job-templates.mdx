@@ -1,0 +1,222 @@
+---
+title: Configure Job Templates
+---
+
+<!-- assets -->
+
+import imgHome from '../../static/img/tutorial/job-template-setup/home.png';
+import imgTpl1 from '../../static/img/tutorial/job-template-setup/template_creation_01.png';
+import imgTpl2 from '../../static/img/tutorial/job-template-setup/template_creation_02.png';
+import imgTpl3 from '../../static/img/tutorial/job-template-setup/template_creation_03.png';
+import imgRear from '../../static/img/tutorial/job-template-setup/import_rear_entities.png';
+import imgTpl4 from '../../static/img/tutorial/job-template-setup/template_creation_04.png';
+import imgTpl5 from '../../static/img/tutorial/job-template-setup/template_creation_05.png';
+import imgTpl6 from '../../static/img/tutorial/job-template-setup/template_creation_06.png';
+
+<!-- assets -->
+## Job Templates
+
+Job templates are configuration containers that provide the system with the information required to start issuing cards, such as: 
+
+- **Layouts** - Association between *SFJ Files* and the *Card Side* on which they should be printed
+- **XY Auto-Positioning Settings** - gives IWS references to correctly position *Entities* before engraving 
+- **OCR Settings** - Used for data integrity checks
+- **Data Source Settings** - Data Source Settings define where and how the system will retrive personalization data for engraving. Although the system is designed to support different kinds of data sources, the current version supports only relational databases. 
+
+import JobTemplate from '../../static/img/diagrams/job-template-info.drawio.svg'
+
+<div className={"svg-content-container"}>
+    <JobTemplate />
+</div>
+
+## Job Template Setup Wizard
+
+Job Templates can be easily created and configued from the WebApp using its setup wizard.
+
+:::tip
+
+Click the **API** tab to see how equivalent actions can be performed using REST API calls.
+
+Use the table of contents on the right to navigate between steps
+
+:::
+
+
+### Opening the Template Wizard
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Click <span className={"icon-btn"}>+</span> button to open the job tempalte setup wizard
+
+<Tabs>
+<TabItem value="webapp" label="Web App">
+
+<img className={"wizard-step"} src={imgHome} />
+
+</TabItem>
+</Tabs>
+
+---
+
+### 1. Create a new Job Template
+
+<Tabs> 
+<TabItem value="webapp" label="Web App">
+
+<p>
+
+Porvide a name and a description for the your template and click the <span className="btn">CREATE TEMPLATE</span> button
+
+</p>
+
+<img className={"wizard-step"} src={imgTpl1} />
+
+</TabItem>
+<TabItem value="api" label="API">
+
+```jsx title="HTTP"
+POST /iws/v1/scanner/job-templates
+Host: $BOX_IP_ADDRESS:5000
+Accept: application/json 
+
+{
+  "name" : "My Template Name",
+  "description" : "My Template Description" 
+}
+```
+```json title="Response payload"
+{
+// highlight-start
+  "id": 1,
+  "name": "string",
+  "description": "string",
+// highlight-end
+  "created": "2019-12-10T10:06:50.466318Z",
+  "updated": "2019-12-10T10:06:50.466318Z",
+  "expectedMarkDuration": "25:01:01.001",
+  ...
+}
+```
+
+:::tip
+Store the job template id somewhere, we will need it later as a parameter for other API calls 
+we created
+:::
+
+</TabItem>
+</Tabs>
+
+---
+
+### 2. Upload SJF Files
+
+<Tabs>
+<TabItem value="webapp" label="Web App">
+
+<p className={"margin-top-2"}>
+
+Now we will need to import *SJF Files* into the system. Click <span className={"btn btn-white"}>ADD NEW</span> to open the file dialog
+
+</p>
+
+<img className={"wizard-step"} src={imgTpl2} />
+
+<p className={"margin-top-2"}>
+
+Select the files you want to import and click <span className={"btn-system"}><u>O</u>pen</span>
+
+</p>
+
+<img className={"wizard-step"} src={imgTpl3} />
+
+
+<p className={"margin-top-2"}>
+
+Click <span className={"btn"}>UPLOAD</span> to start transferring the files you selected. 
+IWS stores the uploaded files and indexes entity metadata in its database. 
+
+</p>
+
+<img className={"wizard-step"} src={imgTpl4} />
+
+</TabItem>
+<TabItem value="api" label="API">
+
+```json title="HTTP"
+
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+### 3. Create Layouts
+
+Layouts are *SJF Files* assigned to a *Job Template* and a *card side*. IWS uses this information during issuance to correctly position the card before marking. 
+
+
+<Tabs>
+<TabItem value="webapp" label="Web App">
+
+<p className={"margin-top-2"}>
+
+The GUI shows a list of previously imported *SJF Files*. Select files that you want to print on the front side of the card and click <span className={"btn"}>NEXT</span>
+
+</p>
+
+<img className={"wizard-step"} src={imgTpl5} />
+
+<p className={"margin-top-2"}>
+
+Do the same for the rear side.
+
+</p>
+
+<img className={"wizard-step"} src={imgRear} />
+
+</TabItem>
+<TabItem value="api" label="API">
+
+```json title="HTTP"
+
+```
+</TabItem>
+</Tabs>
+
+
+### 4. Attach a Data Source
+
+This last step will: 
+* Create a *Data Exchange Table* in IWS's relational database
+* Create a new *Data Source* with the following parameters: 
+    - ConnectionString: The connection string to connect to itself
+    - TableName: The generated table name
+    - QueryTemplate: SQL template query to retrive personalization data from the data exchange table.
+* Attach the created *Data Source* newly clreated *Job Template*
+
+
+<!-- The last thing to do, is attach a *Data Source* to our *Job Template* configuration. During issuance the system will connect to the configured data source to retrieve personalization data. The default system configuration tells IWS to connect to its self-hosted database. Which is `Maria DB` and is accessible on port `3306` -->
+
+<Tabs>
+<TabItem value="webapp" label="Web App">
+
+Go ahead and click <span className={"btn"}>CREATE DATASOURCE</span> to complete the configuration
+
+<img className={"wizard-step"} src={imgTpl6} />
+
+</TabItem>
+<TabItem value="api" label="API">
+
+```json title="HTTP"
+
+```
+
+</TabItem>
+</Tabs>
+
+
+### We're done!
+
+We have created and configured our first job template. Keep reading to see how we can populate *Data Exchange Tables* with personalization data and finally start issuing cards.

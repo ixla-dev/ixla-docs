@@ -1,0 +1,92 @@
+---
+title: System Overview
+---
+
+[icbue-sdk]:https://www.ixla.it/application-software/
+
+## IXLA BOX 
+
+The IXLA BOX is a modular laser engraving system designed for plastic cards personalization applications with mid-high volume production requirements.
+
+### Target applications 
+- ID issuance for National ID Card programs
+- Driver Licenses
+- Resident Permits and other Government credentials issued to citizens and residents.
+
+### Features
+* 500 cards input feeder 
+* 4 Heads for contact/contactless chip encoding module
+* 1-4 Laser Modules 
+* Data Integrity Check Module
+* 500 cards output stacker
+* IWS - IXLA Web Service
+    - REST APIs 
+    - Database based Integration
+
+
+import imgBoxModules from '../static/img/box/box_modules.png'
+
+<div className={"svg-content-container"}>
+    <div className={"flex-item"} style={{maxWidth:"80%"}}>
+        <img src={imgBoxModules} />
+    </div>
+</div>
+
+### Usage
+
+import SystemSetup from '../static/img/diagrams/usage.drawio.svg'
+
+<div className={"svg-content-container"}>
+   <SystemSetup />
+</div>
+
+### Integrations
+
+- Provide Graphical User Interfaces to operate the machine 
+- Can start / stop issuance via REST APIs
+- Schedule new jobs by writing records in *Data Exchange Tables* which hold personalization data. The system updates data exchange tables providing execution status and results. 
+
+### Operators
+- An operator places a stack of cards in the input feeder 
+- From a graphical application starts the automated issuance process
+- The machine keeps issuing cards until any of the following events occur:
+    - There are no more cards in the input feeder 
+    - The system is manually stopped
+    - An error occurred (open interlocks, hardware failures, unhandled software exceptions)
+
+
+
+
+## IWS (IXLA Web Service)
+
+*IWS* is the software platform that automates personalization workflows and exposes APIs for integration. 
+It ships with all our new systems, replacing the [ICube SDK][icbue-sdk].
+
+Key freatures that differentiate *IWS* from the *ICube SDK* are: 
+
+* Job template management
+* Database based Integration
+* Automated personalization workflows
+* REST APIs
+* Web Hooks
+
+import OverView from '../static/img/diagrams/overview.drawio.svg'
+
+<div className={"svg-content-container"}>
+    <OverView />
+</div>
+
+*IWS* sists between software integrations and the machine. 3rd party applications can provider personalization data through *Data Exchange Tables*, which are generated automatically when new *Job Templates* are created.
+
+### IWS's WebApp
+
+Alongside IWS we provide a webapp that can be used to quickly prepare the system and start issuing cards. It is built on top of IWS's REST APIs, meaning that if needed, integrators can build their own tools and applications with the same featureset.
+
+### Features
+* Setup Wizard for template Creation and Configuration
+    * Import *SJF Files*
+    * Create *Layouts* (associate SFJ files to card sides for engraving)
+    * Generate *Data Exchange Tables* 
+* Configure XY Auto-Positioning parameters
+* Configure OCR parameters
+

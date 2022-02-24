@@ -1,0 +1,116 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-ixla-color: #1B2C4F;
+  --ifm-color-primary: #267599;
+  --ifm-color-primary-dark: #4195b6;
+  --ifm-color-primary-darker: #56bde6;
+  --ifm-color-primary-darkest: #67b9df;
+  --ifm-color-primary-light: #1B2C4F;
+  --ifm-color-primary-lighter: #1B2C4F;
+  --ifm-color-primary-lightest: #1B2C4F;
+  --ifm-code-font-size: 95%;
+}
+
+.hero {
+ --ifm-hero-text-color: #fefefe;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme='dark'] :root {
+  --ifm-hero-background-color: #222;
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme='dark'] svg path[fill]:not([fill='none']) {
+  fill: #eee !important;
+}
+
+html[data-theme='dark'] svg g.db path.a {
+  stroke: #eee!important;
+  fill: #111!important;
+}
+html[data-theme='dark'] svg g.db path.b {
+  stroke:#eee!important;
+}
+
+.svg-content-container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+  width: 100%;
+  padding: 32px 0;
+}
+
+.svg-content-container .flex-item {
+  display: flex;
+  flex: 1;
+}
+
+.flex-gap {
+  gap: 16px;
+}
+
+.wizard-step {
+  max-width: calc(min(900px, 100%));
+  text-align: center;
+}
+
+.btn {
+  padding: 4px 16px 8px; 
+  font-weight: 500;
+  font-family: system-ui;
+  border-radius: 4px;
+  color: white;
+  background-color: rgb(92, 119, 255);
+  box-shadow: 0 2px 2px rgba(0,0,0,.2);
+}
+
+.btn-system {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: rgb(240,240,240);
+  font-size: 12px;
+  padding: 4px 16px;
+  border: solid 1px rgba(0, 0, 0, 0.3);
+  font-weight: 500;
+}
+
+.icon-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-content: center;
+  line-height: 24px;
+  width: 48px;
+  padding: 8px;
+  aspect-ratio: 1;
+  font-size: 24px;
+  border-radius: 50%;
+  color: white;
+  background-color: rgb(255, 64, 129);
+  box-shadow: 0 2px 2px rgba(0,0,0,.2);
+}
+
+.btn-white {
+  background-color: white;
+  color: #0d0d0d;
+}
+
+.margin-top-2 {
+  margin-top: 16px;
+}

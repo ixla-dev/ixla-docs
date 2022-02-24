@@ -1,0 +1,89 @@
+# Glossary
+
+### SCAPS SAMLight
+
+SCAPS SAMLight is a WYSIWYG editor for scanner applications. Users can design **jobs** and setup 
+laser engraving parameters using a graphical interface.
+
+Individual elements of the design (text, images, barcodes and shpaes) are called **entities**
+
+import samlight from '../static/img/scaps/job-editor.png'
+
+<img src={samlight} />
+
+
+### SJF Files
+
+Jobs created with SAMLight can be saved as `.sjf` (SCAPS Job Format) files. SFJ Files are the 
+ubiquitous format used in our systems to import and export laser engraving jobs. 
+
+### Entities 
+
+Entities are individual printable elements of a design (text, images, barcodes and shapes) 
+
+import LayoutSample from '../static/img/samples/sample-layout.drawio.svg'
+
+<LayoutSample />
+
+
+### Layouts
+
+Layouts are named groups of entitites associated to a specific card side. The system uses this information during issuance
+to flip the card if needed before engraving. 
+
+Associating layouts to card sides can be done using the Web Application or via API calls.
+
+
+### Job Templates
+
+A Job Template encapsulate all the configuration needed by the system to produce a specific card.
+
+- A List of layouts.
+- Datasource configuration
+- XY Auto-Positioning configuration
+- OCR configuration
+
+Job templates can be created following a guided procedure using the web application or the entire process
+can be automated via API calls.
+
+During issuance, the system select the correct layout and replaces entities values (text, images etc.) with personalization data
+fetched from **Data Exchange Tables**. 
+
+
+
+import JobTemplateER from '../static/img/diagrams/job-template-er.drawio.svg'
+
+<JobTemplateER width={800} />
+
+
+### Data Exchange Tables (DET)
+
+Tables used to provide personalization data to the system. DETs are generated automatically 
+from job templates. 
+
+DETs contain one column for each entity imported in the job template and columns used to 
+persist job template execution and results. 
+
+### Workflow Scheduler 
+
+Is the software component that fetches personalization data from **Data Exchange Tables** and dispatches new jobs
+
+### Workflow Engine
+
+The software component that orchestrates the execution of **Workflows** dispatched by the **Workflow Scheduler**. 
+
+### Workflow
+
+> the sequence of industrial, administrative, or other processes through which a piece of work passes from initiation to completion.
+
+Workflow definitions very from machine to machine because they depend on hardwer configuration. Workflows interface with the machine via **Core Modules**
+
+### Device Abstractions
+
+Is the set of libraries and services that provide an interface for internal software and hardware components, such as: 
+
+- Card Transport control board
+- Encoders card tansport control board
+- Laser control board
+- Cameras
+- SCAPS SAMLight 

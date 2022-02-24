@@ -1,0 +1,129 @@
+---
+title: Providing Personalization Data
+---
+
+
+:::info
+
+Integrations can connect directly to IWS's RDMS, use your favorite tool / connector to populate *Data Exchange Tables*.
+
+- **[The name of the generated Data Exchange Table](#retrieving-data-exchange-tables-ddl)** 
+- **[The list of columns that map to Personalization Data (entities values)](#getting-entity-names)** 
+
+:::
+
+Out of the box, systems that use IWS come with MariaDB preinstalled and configured as follows:
+
+| Property Name | Value | Description | 
+|---|---|---|
+| **INSTALLDIR**            | d:\apps\mysql\bin\   | Installation root
+| **DATADIR**               | d:\apps\mysql\data\  | Location of the data directory
+| **PORT**                  | 3306                 | --port parameter for the server
+| **PASSWORD**              | root                 | Password of the root user
+| **ALLOWREMOTEROOTACESS**  | 1                    | Password of the root user
+
+We give integrators full access to the RDBMS to ensure maximum flexibility when configuring the system.
+
+
+## The ETL Service
+
+The component of IWS that generates *Data Exchange Tables* using metadata retrived from SJF Files is the *ETL (Extract Transform Load) Service*.
+
+We can query the *ETL Service* to obtain *Data Exchange Tables* names and the list of columns that map to personalization data. 
+
+
+### Retriving Data Exchange Tables DDL
+
+*Data Exchange Tables* DDL can be retrieved as follows
+
+```jsx title="HTTP Request - Getting tables DDL"
+GET /iws/v1/etl/{jobId}/exchange-table-ddl
+Accept: application/json
+```
+
+The services returns an object containing the *table name*, and *sql* to create the table if needed. 
+
+```json title="Response Body"
+{
+  "sql": "\nDROP TABLE IF EXISTS `__DET__Demo_Box`;\nCREATE TABLE `__DET__Demo_Box` (\n`job_id` int primary key not null auto_increment,\n`job_status` varchar(255),\n`create_timestamp` datetime default NOW(),\n`update_timestamp` datetime,\n`start_timestamp` datetime,\n`complete_timestamp` datetime,\n`workflow_id` varchar(255),\n`workflow_status` varchar(255),\n`step_id` varchar(255),\n`step_name` varchar(255),\n`stack_trace` longtext default null,\n`Front_DemoBox_000__Signature` MEDIUMBLOB,\n`Front_DemoBox_001__lblName` VARCHAR(255),\n`Front_DemoBox_002__Name` VARCHAR(255),\n`Front_DemoBox_003__lblSurname` VARCHAR(255),\n`Front_DemoBox_004__Surname` VARCHAR(255),\n`Front_DemoBox_005__lblDateOfBirth` VARCHAR(255),\n`Front_DemoBox_006__DateOfBirth` VARCHAR(255),\n`Front_DemoBox_007__lblNationality` VARCHAR(255),\n`Front_DemoBox_008__Nationality` VARCHAR(255),\n`Front_DemoBox_009__lblPlaceOfBirth` VARCHAR(255),\n`Front_DemoBox_010__PlaceOfBirth` VARCHAR(255),\n`Front_DemoBox_011__lblExpiryDate` VARCHAR(255),\n`Front_DemoBox_012__ExpiryDate` VARCHAR(255),\n`Front_DemoBox_013__lblSignature` VARCHAR(255),\n`Front_DemoBox_014__bmpPicture` MEDIUMBLOB,\n`Front_DemoBox_015__Logo` VARCHAR(255),\n`Rear_DemoBox_000__WebSite` VARCHAR(255),\n`Rear_DemoBox_001__Logo` VARCHAR(255)\n) charset=utf8mb4;\n",
+  "tableName": "__DET__Demo_Box"
+}
+```
+
+The contents of the *sql* field properly formatted look like this: 
+
+```sql title="DDL of data exchange table generated for 'Demo Box'"
+DROP TABLE IF EXISTS `__DET__Demo_Box`;
+CREATE TABLE `__DET__Demo_Box` (
+    # Fieds managed by IWS
+    `job_id` int primary key not null auto_increment,
+    `job_status` varchar(255),
+    `create_timestamp` datetime default NOW(),
+    `update_timestamp` datetime,
+    `start_timestamp` datetime,
+    `complete_timestamp` datetime,
+    `workflow_id` varchar(255),
+    `workflow_status` varchar(255),
+    `step_id` varchar(255),
+    `step_name` varchar(255),
+    `stack_trace` longtext default null,
+    # Fields that contain Personalization Data, populated by integrations
+    `Front_DemoBox_000__Signature` MEDIUMBLOB,
+    `Front_DemoBox_001__lblName` VARCHAR(255),
+    `Front_DemoBox_002__Name` VARCHAR(255),
+    `Front_DemoBox_003__lblSurname` VARCHAR(255),
+    `Front_DemoBox_004__Surname` VARCHAR(255),
+    `Front_DemoBox_005__lblDateOfBirth` VARCHAR(255),
+    `Front_DemoBox_006__DateOfBirth` VARCHAR(255),
+    `Front_DemoBox_007__lblNationality` VARCHAR(255),
+    `Front_DemoBox_008__Nationality` VARCHAR(255),
+    `Front_DemoBox_009__lblPlaceOfBirth` VARCHAR(255),
+    `Front_DemoBox_010__PlaceOfBirth` VARCHAR(255),
+    `Front_DemoBox_011__lblExpiryDate` VARCHAR(255),
+    `Front_DemoBox_012__ExpiryDate` VARCHAR(255),
+    `Front_DemoBox_013__lblSignature` VARCHAR(255),
+    `Front_DemoBox_014__bmpPicture` MEDIUMBLOB,
+    `Front_DemoBox_015__Logo` VARCHAR(255),
+    `Rear_DemoBox_000__WebSite` VARCHAR(255),
+    `Rear_DemoBox_001__Logo` VARCHAR(255)
+) charset=utf8mb4;
+```
+As you can see, *Data Exchange Tables* contain fields that map to entity values 
+
+
+### Getting Entity Names
+
+
+```jsx title="HTTP Request - Retrieving Entity Descriptors"
+GET /iws/v1/etl/1/entities
+Accept: application/json
+```
+
+```json title="Response Body"
+[
+  {
+    "entityIndex": 0,
+    // highlight-next-line
+    "entityName": "Front_DemoBox_000__Signature",
+    "groupName": "Front_DemoBox",
+    "displayName": "Signature",
+    "valueType": "Image"
+  },
+  ...
+]
+```
+
+
+Entity names, map 1-to-1 with column names in *Data Exchange Tables*. We can use this information to generate SQL that populates our tables. Eg.
+```sql 
+INSERT INTO `__DET__Demo_Box` (
+        `Front_DemoBox_000__Signature`,
+        `Front_DemoBox_001__lblName`,
+        `Front_DemoBox_002__Name`,
+         ...
+        `Rear_DemoBox_001__Logo`) VALUES ( .. ),( .. ),( .. );
+```
+
+:::note
+We are only populating fields that map to entities values. IWS's managed fields can be ignored when providing data
+:::

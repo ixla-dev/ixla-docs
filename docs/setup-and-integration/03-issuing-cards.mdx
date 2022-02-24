@@ -1,0 +1,69 @@
+---
+title: Issuing cards
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+import imgIssuance from '../../static/img/tutorial/issuance/issuance.png';
+
+
+<Tabs>
+<TabItem value="webapp" label="Web App">
+
+
+
+<div className={"svg-content-container"}>
+    <img src={imgIssuance} className={"flex-item"} />
+</div>
+
+</TabItem>
+
+<TabItem value="api" label="API">
+
+```jsx
+WorkflowSchedulerStartupParamsDto {
+    workflowTypeName?:string;
+    stopAfter?:number;
+    jobTemplateId?:number;
+    dryRun?:boolean;
+    taskAllocationStrategy?:string;
+    noReset?:boolean;
+    disableRedPointer?:boolean;
+    skipEntityUpdates?:boolean;
+}
+```
+
+```jsx title="HTTP - Starting the Workflow Scheduler"
+POST /iws/v1/workflow-scheduler/start
+Accept: application/json
+
+{
+  // The name of the workflow definition we want to use 
+  "workflowTypeName": "BOX",
+  // The number of cards  we want to process before stopping the scheduler, -1 means infinite
+  "stopAfter": -1,
+  // The id of the job template we want to use (what we want to print)
+  "jobTemplateId": 1,
+  // If dry-run is set to true, the system will disable the laser source
+  "dryRun": false,
+  // The strategy used at runtime to decide how to balance mark jobs across availabel laser modules
+  "taskAllocationStrategy": "batch",
+  // If set to true, the transport reset will be skipped when the scheduler is started
+  "noReset": false,
+  // Disables the red-pointer. This is usefull when running workflows that require xy auto-positioning in dry-run mode. 
+  // You don't want the red spot in camera snapshots at runtime. 
+  "disableRedPointer": false,
+  // When set to true, entities in layouts will not be updated with personalization data, layouts will be printed as you see them
+  "skipEntityUpdates": false
+}
+
+```
+
+```json title="Response Body"
+```
+
+</TabItem>
+
+</Tabs>
+
