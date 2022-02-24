@@ -46,10 +46,8 @@ A Job Template encapsulate all the configuration needed by the system to produce
 Job templates can be created following a guided procedure using the web application or the entire process
 can be automated via API calls.
 
-During issuance, the system select the correct layout and replaces entities values (text, images etc.) with personalization data
+During issuance, the system selects the correct layout and replaces entities values (text, images etc.) with personalization data
 fetched from **Data Exchange Tables**. 
-
-
 
 import JobTemplateER from '../static/img/diagrams/job-template-er.drawio.svg'
 

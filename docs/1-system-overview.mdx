@@ -6,7 +6,7 @@ title: System Overview
 
 ## IXLA BOX 
 
-The IXLA BOX is a modular laser engraving system designed for plastic cards personalization applications with mid-high volume production requirements.
+The IXLA BOX is a modular system designed for plastic cards personalization applications with mid-high volume production requirements.
 
 ### Target applications 
 - ID issuance for National ID Card programs
@@ -55,8 +55,6 @@ import SystemSetup from '../static/img/diagrams/usage.drawio.svg'
     - An error occurred (open interlocks, hardware failures, unhandled software exceptions)
 
 
-
-
 ## IWS (IXLA Web Service)
 
 *IWS* is the software platform that automates personalization workflows and exposes APIs for integration. 
@@ -76,17 +74,21 @@ import OverView from '../static/img/diagrams/overview.drawio.svg'
     <OverView />
 </div>
 
-*IWS* sists between software integrations and the machine. 3rd party applications can provider personalization data through *Data Exchange Tables*, which are generated automatically when new *Job Templates* are created.
+<!-- *IWS* sists between software integrations and the machine. 3rd party applications can provider personalization data through *Data Exchange Tables*, which are generated automatically when new *Job Templates* are created. -->
 
 ### IWS's WebApp
 
-Alongside IWS we provide a webapp that can be used to quickly prepare the system and start issuing cards. It is built on top of IWS's REST APIs, meaning that if needed, integrators can build their own tools and applications with the same featureset.
+Alongside IWS we provide a webapp that can be used to quickly configure the system and start issuing cards. 
+It is built on top of IWS's REST APIs. If needed Integrators can build their own tools and applications with the same featureset.
 
 ### Features
 * Setup Wizard for template Creation and Configuration
     * Import *SJF Files*
     * Create *Layouts* (associate SFJ files to card sides for engraving)
     * Generate *Data Exchange Tables* 
-* Configure XY Auto-Positioning parameters
-* Configure OCR parameters
+* GUI to Start / Stop Issuance
+* GUI for XY Auto-Positioning configuration and preview
+* GUI for OCR configuration and preview
+* Live stream from internal cameras
+* Transport control
 

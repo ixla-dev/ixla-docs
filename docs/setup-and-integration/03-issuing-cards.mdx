@@ -1,69 +1,85 @@
 ---
-title: Issuing cards
+title: Start Issuance
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-
 import imgIssuance from '../../static/img/tutorial/issuance/issuance.png';
 
+Issuance can be started from the [WebApp](#issuance-page) or via the Workflow [Scheduler API](#scheduler-api).
 
-<Tabs>
-<TabItem value="webapp" label="Web App">
+### Issuance Page
 
-
-
-<div className={"svg-content-container"}>
-    <img src={imgIssuance} className={"flex-item"} />
+<div>
+<img src={imgIssuance} className={"flex-item"} />
 </div>
 
-</TabItem>
+<br/>
 
-<TabItem value="api" label="API">
+The system will require us to specify: 
+<!-- The interface is pretty self-explanatory. Select the template you want to print and click <span className={"btn"}>START</span> -->
 
-```jsx
-WorkflowSchedulerStartupParamsDto {
-    workflowTypeName?:string;
-    stopAfter?:number;
-    jobTemplateId?:number;
-    dryRun?:boolean;
-    taskAllocationStrategy?:string;
-    noReset?:boolean;
-    disableRedPointer?:boolean;
-    skipEntityUpdates?:boolean;
-}
-```
+### Configuration
 
-```jsx title="HTTP - Starting the Workflow Scheduler"
+This are required parameters. Define what the machine will print (the **Job Template**) and how it will do it (the **Workflow**)
+
+#### Workflow 
+
+The workflow defines the sequence of actions that will be performed by the machine for each card that it will process. 
+On almost every system this option will not be selectable, and can be left with default value (which varies from system to system). 
+
+### Startup Options
+
+Startup options let us set some parameters that will change the behavior of the system at runtime. This is usefull for testing before going on production. Available options are: 
+
+#### Disable Laser Source
+Turns off the laser source. The red spot will be visible and the scan head will move as if it was marking. We can use this option to test/validaste our setup. 
+
+#### Stop after N cards
+Tells the system to automatically stop after the specified number of cards where processed.
+
+#### Skip Entity Updates
+Bypasses the database. Templates are printed without replacing entities values
+
+### Scheduler API
+
+The webapp uses the scheduler API to start/stop issuance. 
+The *StartWorkflowScheduler* endpoint accepts a *WorkflowSchedulerStartupParamsDto* object as a pamameter. 
+The first 6 fields of *WorkflowSchedulerStartupParamsDto* map 1-to-1 with what we've seen in the form above. 
+
+#### Task Allocation Strategy
+Tell s the system which strategy it should use to balance mark jobs across available laser modules. 
+
+#### Disable Red Pointer
+Turns off the red-pointer. This is usefull for testeing workflows that require XY Auto-Positioning with the 
+laser source disabled. 
+
+
+```jsx title="HTTP - Starting Issuance"
 POST /iws/v1/workflow-scheduler/start
 Accept: application/json
 
 {
-  // The name of the workflow definition we want to use 
-  "workflowTypeName": "BOX",
-  // The number of cards  we want to process before stopping the scheduler, -1 means infinite
-  "stopAfter": -1,
-  // The id of the job template we want to use (what we want to print)
-  "jobTemplateId": 1,
-  // If dry-run is set to true, the system will disable the laser source
-  "dryRun": false,
-  // The strategy used at runtime to decide how to balance mark jobs across availabel laser modules
-  "taskAllocationStrategy": "batch",
-  // If set to true, the transport reset will be skipped when the scheduler is started
-  "noReset": false,
-  // Disables the red-pointer. This is usefull when running workflows that require xy auto-positioning in dry-run mode. 
-  // You don't want the red spot in camera snapshots at runtime. 
-  "disableRedPointer": false,
-  // When set to true, entities in layouts will not be updated with personalization data, layouts will be printed as you see them
-  "skipEntityUpdates": false
+    "jobTemplateId": 1,
+    "workflowTypeName": "BOX",
+    "dryRun": true,
+    "stopAfter" : -1,
+    "skipEntityUpdates": true,
+    "noReset": false,
+    "taskAllocationStrategy": "batch", 
+    "disableRedPointer": false
 }
-
 ```
 
 ```json title="Response Body"
+{
+  "status": "Starting",
+  "queueSize": 0,
+  "errorDetails": "string",
+  "lastLoadedItemId": 0,
+  "upTimeSeconds": 0,
+  "currentJobTemplate": {
+      ...
+  }
+}
 ```
-
-</TabItem>
-
-</Tabs>
-
