@@ -9,8 +9,8 @@ const config = {
 
   title: 'IXLA IWS',
   tagline: 'Laser Personalization Systems',
-  url: 'https://docs.ixla.com',
-  baseUrl: '/',
+  url: 'https://ixla-dev.github.io',
+  baseUrl: '/ixla-docs/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo_IXLA_mono_blue.svg',
