@@ -20,6 +20,7 @@ const config = {
   projectName: 'ixla-docs',                // Usually your repo name.
 
   presets: [
+    
     [
       '@docusaurus/preset-classic',
       {
@@ -61,19 +62,19 @@ const config = {
       footer: {
         style: 'dark',
         links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Tutorial',
-                to: '/docs/introduction',
-              },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [],
-          },
+          // {
+          //   title: 'Docs',
+          //   items: [
+          //     {
+          //       label: 'Tutorial',
+          //       to: '/docs/introduction',
+          //     },
+          //   ],
+          // },
+          // {
+          //   title: 'Community',
+          //   items: [],
+          // },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} IXLA s.r.l., Inc. Built with Docusaurus.`,
       },
