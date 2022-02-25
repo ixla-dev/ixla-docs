@@ -36,7 +36,6 @@ const config = {
       require.resolve('@easyops-cn/docusaurus-search-local'),
       {
         hashed: true,
-        hgihlightSearchTermsOnTargetPage: true,
       }
     ]
   ],
