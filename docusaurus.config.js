@@ -14,8 +14,10 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo_IXLA_mono_blue.svg',
-  organizationName: 'IXLA S.r.l',         // Usually your GitHub org/user name.
-  projectName: 'IXLA IWS',                // Usually your repo name.
+
+  deploymentBranch: "gh-pages",
+  organizationName: 'ixla-dev',            // Usually your GitHub org/user name.
+  projectName: 'ixla-docs',                // Usually your repo name.
 
   presets: [
     [
@@ -34,6 +36,7 @@ const config = {
       require.resolve('@easyops-cn/docusaurus-search-local'),
       {
         hashed: true,
+        hgihlightSearchTermsOnTargetPage: true,
       }
     ]
   ],
