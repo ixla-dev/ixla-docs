@@ -59,11 +59,11 @@ laser source disabled.
 <TabItem value="ts" label="Angular">
 
 ```typescript
-  using IXLA.Iws.Sdk;
+  import { WorkflowSchedulerService } from '@ixla/iws-sdk-angular';
   ...
-  private readonly WorkflowSchedulerService _scheduler; 
+  constructor(private readonly scheduler: WorkflowSchedulerService) {}
   ... 
-  await _scheduler.StartWorkflowScheduler({
+  await this.scheduler.StartWorkflowScheduler({
     workflowSchedulerStartupParamsDto: {
       WorkflowTypeName : "BOX",
       StopAfter : -1, 
