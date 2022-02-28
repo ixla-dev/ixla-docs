@@ -63,7 +63,7 @@ laser source disabled.
   ...
   constructor(private readonly scheduler: WorkflowSchedulerService) {}
   ... 
-  await this.scheduler.StartWorkflowScheduler({
+  const schedulerState = await this.scheduler.StartWorkflowScheduler({
     workflowSchedulerStartupParamsDto: {
       WorkflowTypeName : "BOX",
       StopAfter : -1, 
@@ -86,7 +86,7 @@ laser source disabled.
   ...
   private readonly WorkflowSchedulerService _scheduler; 
   ... 
-  await _scheduler.StartWorkflowScheduler(new WorkflowSchedulerStartupParamsDto {
+  WorkflowSchedulerStateDto schedulerSate = await _scheduler.StartWorkflowScheduler(new WorkflowSchedulerStartupParamsDto {
     WorkflowTypeName = "BOX",
     StopAfter = -1, 
     JobTemplateId = 1,
