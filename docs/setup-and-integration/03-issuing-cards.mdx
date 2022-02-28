@@ -55,9 +55,57 @@ Tells the system which strategy it should use to balance mark jobs across availa
 Turns off the red-pointer. This is usefull for testeing workflows that require XY Auto-Positioning with the 
 laser source disabled. 
 
+<Tabs groupId="code">
+<TabItem value="ts" label="Angular">
 
-```jsx title="HTTP - Starting Issuance"
+```typescript
+  using IXLA.Iws.Sdk;
+  ...
+  private readonly WorkflowSchedulerService _scheduler; 
+  ... 
+  await _scheduler.StartWorkflowScheduler({
+    workflowSchedulerStartupParamsDto: {
+      WorkflowTypeName : "BOX",
+      StopAfter : -1, 
+      JobTemplateId : 1,
+      DryRun : false, 
+      TaskAllocationStrategy : null, 
+      NoReset : false,
+      DisableRedPointer : false,
+      SkipEntityUpdates : false
+    }
+  }).toPromise();
+  ...
+```
+
+</TabItem>
+<TabItem value="csharp" label="C#">
+
+```csharp
+  using IXLA.Iws.Sdk;
+  ...
+  private readonly WorkflowSchedulerService _scheduler; 
+  ... 
+  await _scheduler.StartWorkflowScheduler(new WorkflowSchedulerStartupParamsDto {
+    WorkflowTypeName = "BOX",
+    StopAfter = -1, 
+    JobTemplateId = 1,
+    DryRun = false, 
+    TaskAllocationStrategy = null, 
+    NoReset = false,
+    DisableRedPointer = false,
+    SkipEntityUpdates = false
+  });
+  ...
+```
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http
 POST /iws/v1/workflow-scheduler/start
+Host: $BOX_IP_ADDRESS:5000
 Accept: application/json
 
 {
@@ -84,3 +132,8 @@ Accept: application/json
   }
 }
 ```
+
+
+</TabItem>
+
+</Tabs>
