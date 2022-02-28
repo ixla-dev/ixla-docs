@@ -2,6 +2,8 @@
 title: Accessing REST APIs
 ---
 
+[openapi]:https://openapi-generator.tech/docs/installation/
+
 By default IWS's HTTP service listens on port `5000` and binds to `0.0.0.0` (all IP addresses).
 
 Open `http://{BOX_IP_ADDRESS}:5000/swagger/index.html` to see an exhaustive list of available endpoints in Swagger UI.
@@ -10,9 +12,74 @@ import imgSwaggerUI from '../../static/img/webapp/swagger_ui.png'
 
 <img src={imgSwaggerUI} className={"wizard-step"}/>
 
-### Generate SDK clients
+## Generating SDK Clients
 
-IWS's exposes API endpoint definitions in OpenAPI format. Use your favorite tool to generate SKD clients.
+SDK clients can be generated for varioius languages using openapi-generator-cli.
+The following are two examples for generating SDK client clients for Typescript Angular and C# .NETCore clients.
 
+See [@openapitools/opeapi-generator-cli official 
+documentation][openapi] for a full list of supported languages and configurations. 
 
+###  Install `openapi-generator-cli`
 
+First of all you will need to install openapi-generator-cli: 
+
+```bash
+npm install -g @openapitools/openapi-generator-cli
+```
+
+### Typescript Angular
+
+Settings that affect the generator output can be provided in a separate `.json` file
+
+```json title="angular-generator-config.json"
+{
+  "stringEnums": true,
+  "ensureUniqueParams": true,
+  "useSingleRequestParameter": true,
+  "npmName": "my-npm-packagen-name",
+  "enumPropertyNaming": "PascalCase"
+}
+```
+
+Generating the client is easy: 
+
+```bash
+# -o  -- generator's output directory path
+# -g  -- generator name, in this case we use typescript-angular 
+# -c  -- path to a json file that contains settings for the generator 
+# -i  -- input openapi spec in `.yaml` or `.json` format. 
+openapi-generator-cli generate -o ./my-angular-sdk \
+                      //highlight-start
+                      -g typescript-angular
+                      -c angular-generator-config.json
+                      //highlight-end
+                      -i http://$BOX_IP_ADDRESS:5000/iws/v1/swagger.yaml \
+```
+
+### C# .NETCore/.NET5
+
+```json title="csharp-generator-config.json"
+{
+  "stringEnums": true,
+  "ensureUniqueParams": true,
+  "returnICollection" : true,
+  "useSingleRequestParameter": true,
+  "sortParamsByRequiredFlag" : true,
+  "netCoreProjectFile" : true,
+  "packageName" : "IXLA.Iws.Sdk",
+  "sourceFolder" : "src",
+  "nonPublicApi" : false,
+  "targetFramework" : "netstandard2.1",
+  "enumPropertyNaming": "PascalCase"
+}
+```
+
+```bash
+openapi-generator-cli generate -o ./my-csharp-sdk \
+                      //highlight-start
+                      -g csharp-netcore
+                      -c csharp-generator-config.json
+                      //highlight-end
+                      -i http://$BOX_IP_ADDRESS:5000/iws/v1/swagger.yaml \
+```

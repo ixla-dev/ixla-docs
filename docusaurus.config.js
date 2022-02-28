@@ -79,7 +79,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} IXLA s.r.l., Inc. Built with Docusaurus.`,
       },
       prism: {
-        additionalLanguages: ["powershell", "http"],
+        additionalLanguages: ["powershell", "http", "csharp"],
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },

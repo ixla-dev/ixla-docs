@@ -29,9 +29,9 @@ import JobTemplate from '../../static/img/diagrams/job-template-info.drawio.svg'
     <JobTemplate />
 </div>
 
-## Job Template Setup Wizard
-
 Job Templates can be easily created and configued from the WebApp using its setup wizard.
+
+## Job Template Setup Wizard
 
 :::tip
 
@@ -49,7 +49,7 @@ import TabItem from '@theme/TabItem';
 
 Click <span className={"icon-btn"}>+</span> button to open the job tempalte setup wizard
 
-<Tabs>
+<Tabs groupId="switch" >
 <TabItem value="webapp" label="Web App">
 
 <img className={"wizard-step"} src={imgHome} />
@@ -61,7 +61,7 @@ Click <span className={"icon-btn"}>+</span> button to open the job tempalte setu
 
 ### 1. Create a new Job Template
 
-<Tabs> 
+<Tabs groupId="switch"> 
 <TabItem value="webapp" label="Web App">
 
 <p>
@@ -75,7 +75,66 @@ Provide a name and a description for the your template and click the <span class
 </TabItem>
 <TabItem value="api" label="API">
 
-```jsx title="HTTP"
+All the operations related to SJF files and, more generally, to SCAPS SAMLight can be 
+performed through the *Scanner API*. 
+
+When we create a new tempate, the system perform the following operations: 
+
+- Create a new job template in samlight
+- Generate a unique identifier 
+- Use the unique identifier as a filename for the new file
+- Save the new job in its file store 
+
+<Tabs>
+<TabItem value="ts" label="Angular">
+
+```typescript
+import { ScannerService } from '@ixla/iws-sdk-angular'
+
+// ScannerService injected from DI
+export class MyAppService {
+  constructor(private readonly scanner: ScannerService) {
+  }
+
+  async createJobTemplate(name: string, description: string) {
+      return await this.scanner.createJobTemplate({
+          createJobTemplateDto: { name, description }
+      });
+  }
+}
+
+```
+
+</TabItem>
+<TabItem value="csharp" label="C#">
+
+```csharp
+using IXLA.Iws.Sdk;
+
+public class MyAppService {
+
+  private readonly ScannerApi _scanner;
+  
+  // ScannerService injected from DI
+  public MyAppService(ScannerService scanner) {
+    _scanner = scanner;
+  }
+
+  public async Task<JobTemplateDto> CreateJobTemplate(string name, string description) {
+      var parameters = new CreateJobTempltateDto {
+        Name = name,
+        Description = description
+      }
+      return await _scanner.CreateJobTemplate(parameters);
+  }
+}
+
+```
+
+</TabItem>
+<TabItem value="http" label="HTTP">
+
+```http
 POST /iws/v1/scanner/job-templates
 Host: $BOX_IP_ADDRESS:5000
 Accept: application/json 
@@ -84,7 +143,12 @@ Accept: application/json
   "name" : "My Template Name",
   "description" : "My Template Description" 
 }
+
 ```
+
+</TabItem>
+</Tabs>
+
 ```json title="Response payload"
 {
 // highlight-start
@@ -110,7 +174,7 @@ Store the job template id somewhere, we will need it later as a parameter for ot
 
 ### 2. Upload SJF Files
 
-<Tabs>
+<Tabs groupId="switch">
 <TabItem value="webapp" label="Web App">
 
 <p className={"margin-top-2"}>
@@ -142,16 +206,162 @@ IWS stores the uploaded files and indexes entity metadata in its database.
 </TabItem>
 <TabItem value="api" label="API">
 
-Files can be imported using the *Scanner API*. 
+SJF Files can be imported using the *Scanner API*
 
-```jsx title="HTTP - Uploading SJF Files"
-POST /iws/v1/scanner/job-templates
-Host: $BOX_IP_ADDRESS:5000
-Accept: application/json 
+<Tabs>
+
+<TabItem value="ts" label="Angular">
+
+The *UploadLayoutFile* endpoint accepts an *UploadLayoutRequestFileParams* object. 
+To upload the files using the *typescript-angular* SDK you will need a browser that supports the *File API*
+
+```typescript title="UploadLayoutFileRequestParams.ts"
+export interface UploadLayoutFileRequestParams {
+    // The scannerId parameter is present in all ScannerService's endpoints, it 
+    // is used to route requests towards the right module in machines that 
+    // have more than 1 laser (eg. IXLA BOX). If it is not provided the system 
+    // will use the first available module
+    scannerId?: string;   
+    layoutName?: string;  // Layouts are identified by name
+    supportSide?: string; // support side can be ignored during import
+    files?: Array<Blob>;  // files to be uploaded
+}
 ```
 
-```json title="Response Body"
+```typescript
+import { ScannerService } from '@ixla/iws-sdk-angular';
+...
+constructor(private readonly scanner: ScannerService) {}
+...
 
+// retrieve the list of files to import from UI/External system APIs 
+const filesToImport: Array<UploadLayoutFileRequestParams> = [ ... ]; 
+
+// remember, to extract entities metadata the system uses SCAPS SAMLight 
+// we cannot parallellize this operations on the same node. 
+// We could do it, using different scanners for each layout, but would complicate 
+// the code a lot for a very little gain in performance, since this is an operation 
+// that is done once, during system configuration
+foreach(var requestParams in filesToImport) {
+  await this.scanner.uploadLayoutFile(requestParams).toPromise();
+}
+
+```
+
+</TabItem>
+
+<TabItem value="csharp" label="C#">
+
+```csharp title=""
+using IXLA.Iws.Sdk;
+... 
+private readonly _scanner: ScannerService; 
+...
+
+// file stream for an sfj file named front.sjf
+using var frontStream = System.IO.File.OpenRead(@"front.sjf")
+// file stream for an sfj file named rear.sjf
+using var rearStream = System.IO.File.OpenRead(@"rear.sjf")
+
+
+// import front.sjf 
+await _scanner.uploadLayoutFile(
+  layoutName: "Front",
+  supportSide: "front" // optional, can be ignored during upload
+  files: new List<System.IO.File> { frontStream }
+);
+
+// import rear.sjf 
+await _scanner.uploadLayoutFile(
+  layoutName: "Rear",
+  supportSide: "rear" // optional, can be ignored during upload
+  files: new List<System.IO.File> { rearStream }
+);
+
+```
+
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http
+POST /iws/v1/scanner/layouts
+Host: $BOX_IP_ADDRESS:5000
+Content-Type: multipart/form-data;boundary="boundary"
+
+--boundary
+Content-Disposition: form-data; name="files"; filename="Front_DemoBox.sjf"
+Content-Type: binary/octet-stream
+... sjf contents ...
+
+```
+
+</TabItem>
+
+</Tabs>
+
+
+Once files were transferred, the system will perform the following actions automatically: 
+
+- Open SCAPS SAMLight 
+- Create a new empty Job
+- Load the uploaded file with the `Overwrite Entities` flag enabled
+- Rename entities adding a prefix to avoid duplicates 
+- Index entities and extract metadata
+- Generate a unique identifier for the new job
+- Save the job using the generated id as filename
+
+At the end of the process it will return a *LayoutDto* object, which contains the extracted metadata
+
+```json title="Response Body"
+// LayoutDto
+{
+  "id": 0,
+  "name": "string",
+  "supportSide": "string",
+  "created": "2019-12-10T10:06:50.466318Z",
+  "updated": "2019-12-10T10:06:50.466318Z",
+  // ApplicationFileDto
+  "file": { 
+    "filename": "string",
+    "originalFilename": "string",
+    "displayName": "string",
+    "size": 0,
+    "location": "string",
+    "checksum": "string",
+    "extension": "string",
+    "created": "2019-12-10T10:06:50.466318Z",
+    "updated": "2019-12-10T10:06:50.466318Z"
+  },
+  // EntityDto
+  "entities": [
+    {
+      "id": 0,
+      "penId": 0,
+      "markLoopCount": 0,
+      "name": "string",
+      "displayName": "string",
+      "prefix": "string",
+      "type": "Bitmap",
+      "userData": 0,
+      "layoutId": 0,
+      "layoutName": "string",
+      "rotationAngle": 0,
+      "expectedMarkDuration": "25:01:01.001",
+      // DRectangleDto
+      "outline": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "dataType": "double"
+      }
+    }
+    ...
+  ],
+  ...
+}
 ```
 
 </TabItem>
@@ -163,8 +373,7 @@ Accept: application/json
 
 Layouts are *SJF Files* assigned to a *Job Template* and a *card side*. IWS uses this information during issuance to correctly position the card before marking. 
 
-
-<Tabs>
+<Tabs groupId="switch">
 <TabItem value="webapp" label="Web App">
 
 <p className={"margin-top-2"}>
@@ -186,39 +395,165 @@ Do the same for the rear side.
 </TabItem>
 <TabItem value="api" label="API">
 
-```json title="HTTP"
+In terms of API calls, *Creating a Layout* means: 
+
+- Loading a Job Template
+- Importing entities from another SJF file, specifying where those entities should be printed (front, rear)
+- Saving the Job file
+
+An example of what the webapp does (in pseudo code) looks like this: 
+
+<Tabs>
+<TabItem value="ts" label="Angular"> 
+
+```typescript
+
+  // load the job template in SCAPS SAMLight
+  await this.scannerApi.loadJobTemplate({
+    id: jobTemplateId, // jobTemplateId saved previously when we created the job template
+    force:true
+  }).toPromise();
+
+  // selectedLayouts is the list of selected elements by the user in the UI 
+  // it is a collection of { layoutId: number, cardSide: string } objects
+  for(const selection of selectedLayouts) {
+    // loadLayout will import the entities from the layout's SJF file
+    // into the currently loaded job template and assigne the specified card side.
+    await this.scannerApi.loadLayout({
+      id: selection.layoutId,
+      cardSide: selection.cardSide 
+    }).toPromise();  
+  }
+
+  // saveJobTemplate saves the template's SJF file, and updates the database
+  await this.scannerApi.saveJobTemplate({}).toPromise();
 
 ```
+
+</TabItem>
+<TabItem value="csharp" label="C#"> 
+
+```csharp
+// data type used to represent SJF files assigned to a card side
+public record LayoutSelection(int Id, string CardSide);
+
+public async Task AssignLayouts(int jobTemplateId, IEnumerable<LayoutSelection> selectedLayouts) 
+{
+   await _scannerApi.LoadJobTemplate(id: jobTemplateId);
+
+   foreach(var selection in selectedLayouts) 
+      await _scannerApi.LoadLayout(layoutId: selection.LayoutId, cardSide: selectedLayouts.cardSide);
+
+   await _scannerApi.SaveJobTemplate();
+}
+```
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http title="Load Job Template"
+POST /iws/v1/scanner/load-job-template?id=1
+Host: $BOX_IP_ADDRESS:5000
+Accept: application/json
+```
+
+
+```http title="Load Layouts"
+POST /iws/v1/scanner/load-layout?layoutName=DemoBox_Front&supportSide=front
+Host: $BOX_IP_ADDRESS:5000
+Accept: application/json
+
+... 
+
+POST /iws/v1/scanner/load-layout?layoutName=DemoBox_Rear&supportSide=rear
+Host: $BOX_IP_ADDRESS:5000
+Accept: application/json
+
+``` 
+
+
+```http title="Save the job template"
+POST /iws/v1/scanner/save
+Host: $BOX_IP_ADDRESS:5000
+Accept: application/json
+
+```
+
+</TabItem>
+</Tabs>
+
+
 </TabItem>
 </Tabs>
 
 
 ### 4. Attach a Data Source
 
-This last step will: 
-* Create a *Data Exchange Table* in IWS's relational database
-* Create a new *Data Source* with the following parameters: 
-    - ConnectionString: The connection string to connect to itself
-    - TableName: The generated table name
-    - QueryTemplate: SQL template query to retrive personalization data from the data exchange table.
-* Attach the created *Data Source* newly clreated *Job Template*
+The last thing to do is to generate the database tables that we will use to provide personalization data and schedule jobs.
 
-
-<!-- The last thing to do, is attach a *Data Source* to our *Job Template* configuration. During issuance the system will connect to the configured data source to retrieve personalization data. The default system configuration tells IWS to connect to its self-hosted database. Which is `Maria DB` and is accessible on port `3306` -->
-
-<Tabs>
+<Tabs groupId="switch">
 <TabItem value="webapp" label="Web App">
 
-Go ahead and click <span className={"btn"}>CREATE DATASOURCE</span> to complete the configuration
+Go ahead and click <span className={"btn"}>CREATE DATASOURCE</span> to complete the configuration. Flagging the *Generate mock dataset* checkbox will populate 
+the generated tables with mock data. This might be usefull for testing purposes.
 
 <img className={"wizard-step"} src={imgTpl6} />
 
 </TabItem>
 <TabItem value="api" label="API">
 
-```json title="HTTP"
+We can generate *Data Exchange Tables* 
 
+- Create a *Data Exchange Table* for the specified job template
+- Create a new *Data Source* for this job template. Data Source contain information such as: 
+  - Type (For now only relational databases)
+  - Connection string 
+  - Table Name 
+  - Query Template
+
+<Tabs>
+
+<TabItem value="ts" label="Angular">
+
+```typescript
+import {EtlService} from '@ixla/iws-sdk-angular'
+...
+// EtlService injected from DI
+constructor(private readonly etlService: EtlService) {
+}
+...
+await this.etlService.generateDataSource({
+  // job templateId previously stored or retrieved from APIs
+  jobTemplateId: jobTemplateId
+}).toPromise()
+...
 ```
+
+</TabItem>
+<TabItem value="csharp" label="C#">
+
+```csharp
+  using IXLA.Iws.Sdk;
+  ...
+  private readonly EtlService _etl;
+  ...
+  _etl.GenerateDataSource(jobTemplateId)
+```
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http
+POST /iws/v1/etl/JOB_TEMPLATE_ID/generate-datasource
+Host: $BOX_IP_ADDRESS:5000
+Accept: application/json
+```
+
+</TabItem>
+
+</Tabs>
 
 </TabItem>
 </Tabs>
@@ -226,4 +561,5 @@ Go ahead and click <span className={"btn"}>CREATE DATASOURCE</span> to complete 
 
 ### We're done!
 
-We have created and configured our first job template. Keep reading to see how we can populate *Data Exchange Tables* with personalization data and finally start issuing cards.
+We have created and configured our first job template. 
+Keep reading to see how we can populate *Data Exchange Tables* with personalization data and finally start issuing cards.
