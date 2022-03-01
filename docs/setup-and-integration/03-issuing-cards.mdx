@@ -31,13 +31,13 @@ On almost every system this option will not be selectable, and can be left with 
 
 ### Startup Options
 
-Startup options let us set some parameters that will change the behavior of the system at runtime. This is usefull for testing before going on production. Available options are: 
+Startup options let us set some parameters that will change the behavior of the system at runtime. This is useful for testing before going on production. Available options are: 
 
 #### Disable Laser Source
-Turns off the laser source. The red spot will be visible and the scan head will move as if it was marking. We can use this option to test/validaste our setup. 
+Turns off the laser source. The red spot will be visible and the scan head will move as if it was marking. We can use this option to test/validate our setup. 
 
 #### Stop after N cards
-Tells the system to automatically stop after the specified number of cards where processed.
+Tells the system to automatically stop after the specified number of cards were processed.
 
 #### Skip Entity Updates
 Bypasses the database. Templates are printed without replacing entities values
@@ -52,7 +52,7 @@ The first 6 fields of *WorkflowSchedulerStartupParamsDto* map 1-to-1 with what w
 Tells the system which strategy it should use to balance mark jobs across available laser modules. 
 
 #### Disable Red Pointer
-Turns off the red-pointer. This is usefull for testeing workflows that require XY Auto-Positioning with the 
+Turns off the red-pointer. This is useful for testeing workflows that require XY Auto-Positioning with the 
 laser source disabled. 
 
 <Tabs groupId="code">
