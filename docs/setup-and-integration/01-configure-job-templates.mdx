@@ -435,14 +435,14 @@ An example of what the webapp does (in pseudo code) looks like this:
 
 ```csharp
 // data type used to represent SJF files assigned to a card side
-public record LayoutSelection(int Id, string CardSide);
+public record LayoutSelection(int LayoutId, string CardSide);
 
 public async Task AssignLayouts(int jobTemplateId, IEnumerable<LayoutSelection> selectedLayouts) 
 {
-   await _scannerApi.LoadJobTemplate(id: jobTemplateId);
+   await _scannerApi.LoadJobTemplate(jobTemplateId);
 
    foreach(var selection in selectedLayouts) 
-      await _scannerApi.LoadLayout(layoutId: selection.LayoutId, cardSide: selectedLayouts.cardSide);
+      await _scannerApi.LoadLayout(selection.LayoutId, selectedLayouts.cardSide);
 
    await _scannerApi.SaveJobTemplate();
 }

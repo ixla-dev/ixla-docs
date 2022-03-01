@@ -51,10 +51,10 @@ Generating the client is easy:
 # -i  -- input openapi spec in `.yaml` or `.json` format. 
 openapi-generator-cli generate -o ./my-angular-sdk \
                       //highlight-start
-                      -g typescript-angular
-                      -c angular-generator-config.json
+                      -g typescript-angular \
+                      -c angular-generator-config.json \
                       //highlight-end
-                      -i http://$BOX_IP_ADDRESS:5000/iws/v1/swagger.yaml \
+                      -i http://$BOX_IP_ADDRESS:5000/iws/v1/swagger.yaml
 ```
 
 ### C# .NETCore/.NET5
@@ -78,8 +78,8 @@ openapi-generator-cli generate -o ./my-angular-sdk \
 ```bash
 openapi-generator-cli generate -o ./my-csharp-sdk \
                       //highlight-start
-                      -g csharp-netcore
-                      -c csharp-generator-config.json
+                      -g csharp-netcore \
+                      -c csharp-generator-config.json \
                       //highlight-end
-                      -i http://$BOX_IP_ADDRESS:5000/iws/v1/swagger.yaml \
+                      -i http://$BOX_IP_ADDRESS:5000/iws/v1/swagger.yaml
 ```
