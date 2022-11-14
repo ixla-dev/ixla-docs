@@ -192,7 +192,7 @@
                     <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 136px; height: 1px; padding-top: 130px; margin-left: 167px;">
                         <div data-drawio-colors="color: #ffffff; " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 16px; font-family: system-ui; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: none; white-space: normal; overflow-wrap: normal;">
-                                IWS WebApp
+                                AIDA WebApp
                                 <br/>
                                 or APIs
                             </div>
@@ -200,7 +200,7 @@
                     </div>
                 </foreignObject>
                 <text x="235" y="135" fill="#ffffff" font-family="system-ui" font-size="16px" text-anchor="middle">
-                    IWS WebApp...
+                    AIDA WebApp...
                 </text>
             </switch>
         </g>
@@ -211,7 +211,7 @@
                     <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 136px; height: 1px; padding-top: 130px; margin-left: 537px;">
                         <div data-drawio-colors="color: #ffffff; " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 16px; font-family: system-ui; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: none; white-space: normal; overflow-wrap: normal;">
-                                IWS WebApp
+                                AIDA WebApp
                                 <br/>
                                 or APIs
                             </div>
@@ -219,7 +219,7 @@
                     </div>
                 </foreignObject>
                 <text x="605" y="135" fill="#ffffff" font-family="system-ui" font-size="16px" text-anchor="middle">
-                    IWS WebApp...
+                    AIDA WebApp...
                 </text>
             </switch>
         </g>
