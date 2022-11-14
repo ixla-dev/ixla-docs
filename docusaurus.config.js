@@ -7,8 +7,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
 
-  title: 'AIDA',
-  tagline: 'Laser Personalization Systems',
+  title: 'IXLA - AIDA',
+  tagline: 'Automated Perso/Machine Controller',
   url: 'https://ixla-dev.github.io',
   baseUrl: '/ixla-docs/',
   onBrokenLinks: 'throw',
