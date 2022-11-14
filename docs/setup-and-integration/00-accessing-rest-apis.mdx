@@ -4,7 +4,7 @@ title: Accessing REST APIs
 
 [openapi]:https://openapi-generator.tech/docs/installation/
 
-By default IWS's HTTP service listens on port `5000` and binds to `0.0.0.0` (all IP addresses).
+By default AIDA's HTTP service listens on port `5000` and binds to `0.0.0.0` (all IP addresses).
 
 Open `http://{BOX_IP_ADDRESS}:5000/swagger/index.html` to see an exhaustive list of available endpoints in Swagger UI.
 
@@ -54,7 +54,7 @@ openapi-generator-cli generate -o ./my-angular-sdk \
                       -g typescript-angular \
                       -c angular-generator-config.json \
                       //highlight-end
-                      -i http://$BOX_IP_ADDRESS:5000/iws/v1/swagger.yaml
+                      -i http://$BOX_IP_ADDRESS:5000/AIDA/v1/swagger.yaml
 ```
 
 ### C# .NETCore/.NET5
@@ -67,7 +67,7 @@ openapi-generator-cli generate -o ./my-angular-sdk \
   "useSingleRequestParameter": true,
   "sortParamsByRequiredFlag" : true,
   "netCoreProjectFile" : true,
-  "packageName" : "IXLA.Iws.Sdk",
+  "packageName" : "IXLA.AIDA.Sdk",
   "sourceFolder" : "src",
   "nonPublicApi" : false,
   "targetFramework" : "netstandard2.1",
@@ -81,5 +81,5 @@ openapi-generator-cli generate -o ./my-csharp-sdk \
                       -g csharp-netcore \
                       -c csharp-generator-config.json \
                       //highlight-end
-                      -i http://$BOX_IP_ADDRESS:5000/iws/v1/swagger.yaml
+                      -i http://$BOX_IP_ADDRESS:5000/AIDA/v1/swagger.yaml
 ```

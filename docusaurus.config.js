@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
 
-  title: 'IXLA IWS',
+  title: 'AIDA',
   tagline: 'Laser Personalization Systems',
   url: 'https://ixla-dev.github.io',
   baseUrl: '/ixla-docs/',

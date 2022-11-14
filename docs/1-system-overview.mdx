@@ -20,7 +20,7 @@ The IXLA BOX is a modular system designed for plastic cards personalization appl
 * 1-4 Laser Modules 
 * Data Integrity Check Module
 * 500 cards output stacker
-* IWS - IXLA Web Service
+* AIDA - Perso/Machine Controller
     - REST APIs 
     - Database based Integration
 
@@ -56,9 +56,9 @@ import SystemSetup from '../static/img/diagrams/usage.drawio.svg'
     - An error occurred (open interlocks, hardware failures, unhandled software exceptions)
 
 
-## IWS (IXLA Web Service)
+## AIDA (Perso/Machine Controller)
 
-*IWS* is the software platform that automates personalization workflows and exposes APIs for integration. 
+*AIDA* is the software platform that automates personalization workflows and exposes APIs for integration.
 
 Key features: 
 
@@ -74,12 +74,12 @@ import OverView from '../static/img/diagrams/overview.drawio.svg'
     <OverView />
 </div>
 
-<!-- *IWS* sists between software integrations and the machine. 3rd party applications can provider personalization data through *Data Exchange Tables*, which are generated automatically when new *Job Templates* are created. -->
+<!-- *AIDA* sists between software integrations and the machine. 3rd party applications can provider personalization data through *Data Exchange Tables*, which are generated automatically when new *Job Templates* are created. -->
 
-### IWS's WebApp
+### AIDA's WebApp
 
-Alongside IWS, a webapp is provided to quickly configure the system and start issuing cards.
-It is built on top of IWS's REST APIs. If needed Integrators can build their own tools and applications with the same featureset.
+Alongside AIDA, a webapp is provided to quickly configure the system and start issuing cards.
+It is built on top of AIDA's REST APIs. If needed Integrators can build their own tools and applications with the same featureset.
 
 ### Features
 * Setup Wizard for template Creation and Configuration

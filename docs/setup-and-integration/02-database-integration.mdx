@@ -6,7 +6,7 @@ title: Database Integration
 
 When we configured our *Job Template* the system has automatically created a *Data Exchange Table* for us. Records in data exchange tables represent jobs that the system will try to process during issuance. 
 
-We will populate data exchange tables with personalization data that will be used to update entities values before engraving. Data exchange tables also contain columns, managed by IWS, that are used to persist workflows execution status and results.
+We will populate data exchange tables with personalization data that will be used to update entities values before engraving. Data exchange tables also contain columns, managed by AIDA, that are used to persist workflows execution status and results.
 
 The [system database](#system-database) is directly accessible to integrations, use your favorite connector / tools to interact with it.
 <!-- 
@@ -22,7 +22,7 @@ Once you have them, you can construct SQL statements to populate the database.
 
 ## System Database
 
-Systems controlled by IWS host an instance of **MariaDB** configured as follows:
+Systems controlled by AIDA host an instance of **MariaDB** configured as follows:
 
 | Property Name | Value | Description | 
 |---|---|---|
@@ -34,7 +34,7 @@ Systems controlled by IWS host an instance of **MariaDB** configured as follows:
 
 ## The ETL Service
 
-The component of IWS that generates *Data Exchange Tables* using metadata retrived from SJF Files is the *ETL (Extract Transform Load) Service*.
+The component of AIDA that generates *Data Exchange Tables* using metadata retrived from SJF Files is the *ETL (Extract Transform Load) Service*.
 
 We can query the *ETL Service* to obtain *Data Exchange Tables* names and the list of columns that map to personalization data. 
 
@@ -43,7 +43,7 @@ We can query the *ETL Service* to obtain *Data Exchange Tables* names and the li
 *Data Exchange Tables* DDL can be retrieved as follows
 
 ```jsx title="HTTP Request - Getting tables DDL"
-GET /iws/v1/etl/{jobId}/exchange-table-ddl
+GET /AIDA/v1/etl/{jobId}/exchange-table-ddl
 Accept: application/json
 ```
 
@@ -61,7 +61,7 @@ The contents of the *sql* field properly formatted look like this:
 ```sql title="DDL of data exchange table generated for 'Demo Box'"
 DROP TABLE IF EXISTS `__DET__Demo_Box`;
 CREATE TABLE `__DET__Demo_Box` (
-    # Fieds used by IWS to persist workflows execution status and results
+    # Fieds used by AIDA to persist workflows execution status and results
     `job_id` int primary key not null auto_increment,
     `job_status` varchar(255),
     `create_timestamp` datetime default NOW(),
@@ -100,7 +100,7 @@ CREATE TABLE `__DET__Demo_Box` (
 ### Retrieving Entity Names
 
 ```jsx title="HTTP Request - Retrieving Entity Descriptors"
-GET /iws/v1/etl/1/entities
+GET /AIDA/v1/etl/1/entities
 Accept: application/json
 ```
 
@@ -130,5 +130,5 @@ INSERT INTO `__DET__Demo_Box` (
 ```
 
 :::note
-We are only populating fields that map to entities values. IWS's managed fields can be ignored when providing data
+We are only populating fields that map to entities values. AIDA's managed fields can be ignored when providing data
 :::

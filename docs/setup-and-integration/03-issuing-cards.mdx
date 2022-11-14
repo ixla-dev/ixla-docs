@@ -45,31 +45,31 @@ Bypasses the database. Templates are printed without replacing entities values
 ### Scheduler API
 
 The webapp uses the scheduler API to start/stop issuance. 
-The *StartWorkflowScheduler* endpoint accepts a *WorkflowSchedulerStartupParamsDto* object as a pamameter. 
+The *StartWorkflowScheduler* endpoint accepts a *WorkflowSchedulerStartupParamsDto* object as a parameter.
 The first 6 fields of *WorkflowSchedulerStartupParamsDto* map 1-to-1 with what we've seen in the form above. 
 
 #### Task Allocation Strategy
 Tells the system which strategy it should use to balance mark jobs across available laser modules. 
 
 #### Disable Red Pointer
-Turns off the red-pointer. This is useful for testeing workflows that require XY Auto-Positioning with the 
+Turns off the red-pointer. This is useful for testing workflows that require XY Auto-Positioning with the
 laser source disabled. 
 
 <Tabs groupId="code">
 <TabItem value="ts" label="Angular">
 
 ```typescript
-  import { WorkflowSchedulerService } from '@ixla/iws-sdk-angular';
+  import { WorkflowSchedulerService } from '@ixla/aida-sdk-angular';
   ...
   constructor(private readonly scheduler: WorkflowSchedulerService) {}
   ... 
   const schedulerState = await this.scheduler.StartWorkflowScheduler({
     workflowSchedulerStartupParamsDto: {
       WorkflowTypeName : "BOX",
-      StopAfter : -1, 
-      JobTemplateId : 1,
-      DryRun : false, 
-      TaskAllocationStrategy : null, 
+      StopAfter : -1, // infinite
+      JobTemplateId : 1,  // the id we of the job template we want to use
+      DryRun : false,  // false = laser source disabled
+      TaskAllocationStrategy : null,  // default value. On modular sistes (BOx)
       NoReset : false,
       DisableRedPointer : false,
       SkipEntityUpdates : false
@@ -82,7 +82,7 @@ laser source disabled.
 <TabItem value="csharp" label="C#">
 
 ```csharp
-  using IXLA.Iws.Sdk;
+  using IXLA.AIDA.Sdk;
   ...
   private readonly WorkflowSchedulerService _scheduler; 
   ... 
@@ -104,7 +104,7 @@ laser source disabled.
 <TabItem value="http" label="HTTP">
 
 ```http
-POST /iws/v1/workflow-scheduler/start
+POST /AIDA/v1/workflow-scheduler/start
 Host: $BOX_IP_ADDRESS:5000
 Accept: application/json
 
