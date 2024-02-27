@@ -665,21 +665,18 @@ sequenceDiagram
         activate j
 
         j ->> j: Load encoding station
-        j -->>  a : Job suspended public errors]
+        j -->>  a : Job suspended public errors
         deactivate j
-        note right of j: "At this point the process is suspended<br/>Waiting a signal to either resume and<br/>execute next opeartions or reject"
 
-        a ->>   w : Webhook: Encoder Loaded
+        a ->>w  : Webhook: Encoder Loaded
+
         break Webhooks Recever Unreachable
-        a ->>+j : Reject card
-        j --x-a : Card Rejectd        
+            a ->>+j : Reject card
+            j --x-a : Card Rejectd        
         end
-
-
 
         w -) p : Enqueue Chip perso 
         w -->> a : 200 OK 
-        note over w, a: "Respond to AIDA quickly and<br/> Process chip perso in background" 
         p --> c : Handle Chip Perso
         
         activate c
@@ -692,14 +689,14 @@ sequenceDiagram
        
        deactivate c
        
-       note over p,a: Once chip perso finishes, we tell AIDA to resume the process<br/> invoking the ExternalProcessCompleted Endpoint<br/> with correspnding outcome = Completed,Faulted
+       note over p,a: Notify AIDA when we finished
 
        alt Chip Perso Succeeded
         p ->> a : Notify Success
         a -->>p : 200 OK
         a -->+j : Resume
         
-        note right of j: Continue With other Perso Operations<br/> (Laser Engraving, Magnetic stripe write ecc)
+        note right of j: Continue With other Perso Operations
 
         break If any perso operation fails
             j -->> a: Perso Failed
