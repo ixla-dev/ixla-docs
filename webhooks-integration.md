@@ -636,7 +636,7 @@ sequenceDiagram
         a --) p: Issunce not started
     end
     w -->> a: 200 OK
-    a ->> w: Webhook: Scheduler Started
+    a ->> w: Webhook | Scheduler Started
 
     note over a: Issuance Started
 ```
@@ -668,7 +668,7 @@ sequenceDiagram
         j -->>  a : Job suspended public errors
         deactivate j
 
-        a ->>w  : Webhook: Encoder Loaded
+        a ->>w  : Webhook | Encoder Loaded
 
         break Webhooks Recever Unreachable
             a ->>+j : Reject card
@@ -701,7 +701,7 @@ sequenceDiagram
         break If any perso operation fails
             j -->> a: Perso Failed
             
-            a -) w:  Webhook: JobFaulted  
+            a -) w:  Webhook | JobFaulted  
             opt
             w --> w : Handle message
             end
@@ -709,14 +709,14 @@ sequenceDiagram
         end
         
         j -->>- a: Perso Finished
-        a -) w : Webhook: Job Completed
+        a -) w : Webhook | Job Completed
        else Chip Perso Failed
             p ->> a : Notify Error
             a -->>p : 200 OK
             a ->>+ j: Reject card 
 
             j --> a: Card Rejected
-            a -x w: Webhook: Job Faulted
+            a -x w: Webhook | Job Faulted
             opt
             w --> w : Handle message
             end
