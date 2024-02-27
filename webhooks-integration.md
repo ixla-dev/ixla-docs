@@ -667,7 +667,7 @@ sequenceDiagram
         j ->> j: Load encoding station
         j -->>  a : Job suspended public errors]
         deactivate j
-        note right of j: At this point the process is suspended<br/>Waiting a signal to either resume and<br/>execute next opeartions or reject
+        note right of j: "At this point the process is suspended<br/>Waiting a signal to either resume and<br/>execute next opeartions or reject"
 
         a ->>   w : Webhook: Encoder Loaded
         break Webhooks Recever Unreachable
@@ -679,7 +679,7 @@ sequenceDiagram
 
         w -) p : Enqueue Chip perso 
         w -->> a : 200 OK 
-        note over w, a: Respond to AIDA quickly and<br/> Process chip perso in background 
+        note over w, a: "Respond to AIDA quickly and<br/> Process chip perso in background" 
         p --> c : Handle Chip Perso
         
         activate c
