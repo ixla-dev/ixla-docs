@@ -655,11 +655,11 @@ sequenceDiagram
 
     box AIDA  
         participant a as Aida REST API
+        participant j as Job
     end
     note over ec,a: At this point Issuance is running AIDA will poll the database for new jobs
 
     loop Polling database for records in Waiting State
-        create participant j as Perso Job
         a -->>+ j  : Start Job
 
         j ->>   j: Load encoding station
