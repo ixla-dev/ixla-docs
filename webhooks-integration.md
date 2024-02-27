@@ -660,13 +660,10 @@ sequenceDiagram
 
     loop Polling database for records in Waiting State
         create participant j as Perso Job
-        a -->> j  : Start Job
+        a -->>+ j  : Start Job
 
-        activate j
-
-        j ->> j: Load encoding station
-        j -->>  a : Job suspended public errors
-        deactivate j
+        j ->>   j: Load encoding station
+        j -->>- a: Job suspended public errors
 
         a ->>w  : Webhook | Encoder Loaded
 
@@ -677,17 +674,12 @@ sequenceDiagram
 
         w -) p : Enqueue Chip perso 
         w -->> a : 200 OK 
-        p --> c : Handle Chip Perso
+        p -->+ c : Handle Chip Perso
         
-        activate c
-        c --> ec : Connect
-        activate ec
+        c -->+ ec : Connect
         note left of ec: Integrations can access the device<br/>via TCP
-        c --> ec : Program Chip
-        deactivate ec
-        c -->> p : Chip perso finished
-       
-       deactivate c
+        ec -->- c : Program Chip
+        c -->>- p : Chip perso finished
        
        note over p,a: Notify AIDA when we finished
 
