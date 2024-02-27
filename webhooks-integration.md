@@ -671,8 +671,8 @@ sequenceDiagram
 
         a ->>   w : Webhook: Encoder Loaded
         break Webhooks Recever Unreachable
-        a ->>   +j : Reject card
-        j --x   -a : Card Rejectd        
+        a ->>+j : Reject card
+        j --x-a : Card Rejectd        
         end
 
 
