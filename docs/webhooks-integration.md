@@ -21,7 +21,7 @@ We can separate messages in 3 categories:
 - [EncoderLoadedMessage](#encoderloadedmessage-suspends-workflow)
 - [OcrExecutedMessage](#ocrexecutedmessage-suspends-workflow)
 
-These messages indicate that AIDA suspended the execution of a Job and it is waiting an external operation to complete (OCR output validation, Chip Encoding reading/writing). The receiving application can singnal the completion of the operation by sending an [ExternalProcessCompletedMessage](#externalprocesscompletedmessage) to the ***SignalExternalProcessCompleted*** API endpoint.
+These messages indicate that AIDA suspended the execution of a Job and it is waiting an external operation to complete (OCR output validation, Chip Encoding, Magnetic / Chip / OCR readback). The receiving application can singnal the completion of the operation by sending an [ExternalProcessCompletedMessage](#externalprocesscompletedmessage) to the ***SignalExternalProcessCompleted*** API endpoint.
 
 #### Examples 
 - [Handling EncoderLoaded Message](#handling-encoderloaded-message)
