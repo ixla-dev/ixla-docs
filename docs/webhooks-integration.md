@@ -5,7 +5,7 @@ id: webhooks-integration
 title: Webhooks Integration 🌐
 ---
 
-### Introduction
+## Introduction
 
 If `Webhooks` are enabled in the `JobTemplate`'s configuration. AIDA publishes notifications when relevant events occur during 
 issuance. 
@@ -16,17 +16,17 @@ with a successful `HTTP Status Code (2xx)`
 
 We can separate message in 3 categories: 
 
-#### External Process Messages
+### External Process Messages
 
 - [EncoderLoadedMessage](#encoderloadedmessage-suspends-workflow)
 - [OcrExecutedMessage](#ocrexecutedmessage-suspends-workflow)
 
 These messages indicate that AIDA suspended the execution of a Job and it is waiting an external operation to complete (OCR output validation, Chip Encoding reading/writing). The receiving application can singnal the completion of the operation by sending an [ExternalProcessCompletedMessage](#externalprocesscompletedmessage) to the ***SignalExternalProcessCompleted*** API endpoint.
 
-##### Examples 
+#### Examples 
 - [Handling EncoderLoaded Message](#handling-encoderloaded-message)
 
-#### Recoverable Error Messages
+### Recoverable Error Messages
 
 - [WorkflowSchedulerProcessSuspendedMessage](#workflowschedulerprocesssuspendedmessage-suspends-workflow)
 
@@ -42,10 +42,10 @@ The controlling application can:
 1. Tell AIDA to resume issuance and retry 
 2. Stop issuance 
 
-##### Examples 
+#### Examples 
 - [Handling SchedulerProcessSuspended Message](#handling-schedulerprocesssuspended-message)
 
-#### Diagnostic Messages
+### Diagnostic Messages
 
 All other messages require the receiving application to respond with a `2xx` status code, indicating that the message was received. 
 
@@ -57,33 +57,33 @@ All other messages require the receiving application to respond with a `2xx` sta
 - [WorkflowCompleted](#workflowcompletedmessage)
 - [WorkflowFaulted](#workflowfaultedmessage)
 
-#### Error Codes & Job Statuses
+### Error Codes & Job Statuses
 
 - [Job Statuses](#jobstatus)
 - [Error Codes](#errorcodes)
 
-#### Sequence Diagrams 
+### Sequence Diagrams 
 
 
 - [Starting Issuance](#issuance-startup-sequence)
 - [Chip Encoding](#chip-encoding-sequence)
 
-#### Examples
+### Examples
 
 - [Handling EncoderLoaded Message](#handling-encoderloaded-message)
 - [Handling SchedulerSuspended Message](#handling-schedulerprocesssuspended-message)
 
 ---
 
-#### Serialization
+### Serialization
 `Enums` are serialized as strings, and properties are serialized in `camelCase`. 
 
 
-### Webhook Messages Types 
+## Webhook Messages Types 
 
 Below there's a listing of all webhook messages. 
 
-#### MessageType
+### MessageType
 
 ```csharp
 public enum MessageType
@@ -119,7 +119,7 @@ public enum MessageType
 }
 ```
 
-#### Common Properties
+### Common Properties
 
 
 All webhook messages inherit from `WorkflowMessage` which has the following properties
@@ -197,11 +197,11 @@ abstract class WorkflowMessage
 
 } 
 ```
-#### Job Statuses and Error Codes
+### Job Statuses and Error Codes
 
 Job statuses are used to indicate if the job is currently running or not. Error codes are used to signal the reason why `Jobs` are in a specific `JobStatus`;
 
-##### JobStatus
+#### JobStatus
 ```csharp
 public enum JobStatus
 {
@@ -259,7 +259,7 @@ public enum JobStatus
     Faulted,
 }
 ```
-##### ErrorCodes
+#### ErrorCodes
 ```csharp
 public enum JobErrorCodes
 {
@@ -391,7 +391,7 @@ public enum JobErrorCodes
 }
 ```
 
-#### EncoderLoadedMessage (Suspends Workflow)
+### EncoderLoadedMessage (Suspends Workflow)
  
 Sent by the machine when a card is placed in one of the available encoding stations. 
 
@@ -414,7 +414,7 @@ public class EncoderLoadedMessage : WorkflowMessage
 }
 ```
 
-#### OcrExecutedMessage (Suspends Workflow)
+### OcrExecutedMessage (Suspends Workflow)
 
 At the end of an OCR reading, the machine sends `OcrExecutedMessage` containing the 
 result of the readings.
@@ -446,7 +446,7 @@ public class OCRResult
     public float MeanConfidence;
 }
 ```
-#### WorkflowSchedulerProcessSuspendedMessage (Suspends Workflow)
+### WorkflowSchedulerProcessSuspendedMessage (Suspends Workflow)
 
 This message can be published for 2 reasons: 
 1. The Input Feeder Is empty (`ErrorCode = FeederEmpty`) 
@@ -460,7 +460,7 @@ public class WorkflowSchedulerProcessSuspendedMessage : WorkflowMessage
 }
 ```
 
-#### WebhookReceiverHealthCheckMessage 
+### WebhookReceiverHealthCheckMessage 
 
 The `WebhookReceiverHealthCheckMessage` is used by AIDA to test `WebhooksReceiver` availability, it is sent: 
 
@@ -474,7 +474,7 @@ public class WebhookReceiverHealthCheckMessage : WorkflowMessage
 }
 ```
 
-#### WorkflowCancelledMessage
+### WorkflowCancelledMessage
 
 Published when a workflow is cancelled. The reason why the job was cancelled is indicated in the `ErrorCode` property.
 
@@ -484,7 +484,7 @@ public class WorkflowCancelledMessage : WorkflowMessage
     public MessageType MessageType => MessageType.WorkflowCancelled;
 }
 ```
-#### WorkflowCompletedMessage
+### WorkflowCompletedMessage
 
 Published at the end of the personalization process. This message indicates that the card was successfully produced and was moved
 to the output stacker
@@ -496,7 +496,7 @@ public class WorkflowCompletedMessage : WorkflowMessage
 }
 ```
 
-#### WorkflowFaultedMessage
+### WorkflowFaultedMessage
 
 Published if an error occurred during the production process or any of the external processes returned `Outcome = Faulted`. 
 The `ErrorCode` property contains the reason of the fault.
@@ -508,7 +508,7 @@ public class WorkflowFaultedMessage : WorkflowMessage
 }
 ```
 
-#### WorkflowSchedulerStartedMessage
+### WorkflowSchedulerStartedMessage
 
 Sent when AIDA starts polling the database for records
 
@@ -518,7 +518,7 @@ public class WorkflowSchedulerStartedMessage : WorkflowMessage
     public MessageType MessageType => MessageType.WorkflowSchedulerStarted;
 }
 ```
-#### WorkflowSchedulerStoppedMessage
+### WorkflowSchedulerStoppedMessage
 
 Sent when all running jobs finished executing. This message is necessary because issuance can be stopped in 2 modalities 
 
@@ -553,7 +553,7 @@ public enum WorkflowSchedulerStopReason
     TransportResetFailed
 }
 ```
-#### ExternalProcessCompletedMessage
+### ExternalProcessCompletedMessage
 
 This is the payload that `Webhook Receivers` must send when invoking the `SignalExternalProcessCompleted` endpoint. Only 2 properties are required and they are: 
 
@@ -605,12 +605,12 @@ public enum WorkflowAction
     Resume
 }
 ```
-### Sequence Diagrams
+## Sequence Diagrams
 
 Below you can find sequence diagrams that illustrate the Issuance startup sequence and the interations between AIDA 
 and the webhook receiver during job execution.
 
-#### Issuance Startup Sequence
+### Issuance Startup Sequence
 
 ```mermaid
 sequenceDiagram
@@ -644,7 +644,7 @@ sequenceDiagram
     note over a: Issuance Started
 ```
 
-#### Chip Encoding Sequence
+### Chip Encoding Sequence
 
 ```mermaid
 sequenceDiagram 
@@ -720,9 +720,9 @@ sequenceDiagram
     end
 ```
 
-### Examples
+## Examples
 
-#### Handling EncoderLoaded Message
+### Handling EncoderLoaded Message
 
 Once AIDA loads the encoding station it will send a request like the following 
 
@@ -764,7 +764,7 @@ HTTP/1.1 200 OK
 At this point we can do whatever we want with the card. Once we finish we can use the *SignalExternalProcessCompleted* API endpoint to either resume the process and continue with other operations or reject the card.
 
 
-##### Resuming / Rejecting
+#### Resuming / Rejecting
 
 ```http
 POST /aida/v1/workfllow-scheduler/signal/external-process-completed HTTP/1.1
@@ -793,7 +793,7 @@ Content-Type: application/json
 }
 ```
 
-#### Handling SchedulerProcessSuspended Message
+### Handling SchedulerProcessSuspended Message
 
 In the case of recoverable errors, AIDA suspends issuance and publishes the `WorfklowSchedulerProcessSuspendedMessage`. Possible error codes are: 
 
@@ -805,7 +805,7 @@ The controlling application can decide which is the correct behavior in this cas
 It could notify the operator about the error, and then invoke the ***ResumeWorkflowScheduler*** endpoint or stop issuance *Gracefuly* invoking the ***StopWorkflowScheduler*** endpoint.
 
 
-##### Feeder empty example
+#### Feeder empty example
 
 In this example we will see how to handle the `FeederEmpty` erorr code, but the same concept applies to other recoverable errors like `OpenInterlock`. 
 
@@ -824,7 +824,7 @@ Content-Type: application/json
 
 In this case we can load the input feeder with cards, then tell AIDA to retry by invoking the ***ResumeWorkflowScheduler*** endpoint. 
 
-##### Resuming suspended workflows
+#### Resuming suspended workflows
 
 ```http
 POST /aida/v1/workflow-scheduler/resume HTTP/1.1
@@ -837,7 +837,7 @@ This endpoint does not require the `workflowInstanceId` parameter because it wil
 
 When resuming, AIDA will try to execute the last activity that caused the process to suspend. If it encounters the same error condition, it will simply suspend workflows again and repeat the process. 
 
-##### Graceful stop
+#### Graceful stop
 
 Lets suppose we don't want to recover from the `FeederEmpty` state, instead we want the machine to finish whatever it was doing and stop. To do this, we can instruct it to stop *gracefully* by invoking the `StopWorkflowScheduler` endpoint with the `stopRunningWorkflows` parameter set to `false` 
 
