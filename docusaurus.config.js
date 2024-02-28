@@ -18,6 +18,7 @@ const config = {
     deploymentBranch: "gh-pages",
     organizationName: 'ixla-dev',            // Usually your GitHub org/user name.
     projectName: 'ixla-docs',                // Usually your repo name.
+    trailingSlash: false,
 
     presets: [
 
