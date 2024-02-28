@@ -14,7 +14,7 @@ issuance.
 For operations like **Chip Encoding, Readback and OCR** webhooks are mandatory. The receiving application must respond to webhook requests
 with a successful `HTTP Status Code (2xx)` 
 
-We can separate message in 3 categories: 
+We can separate messages in 3 categories: 
 
 ### External Process Messages
 
