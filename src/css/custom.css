@@ -48,6 +48,10 @@ html[data-theme='dark'] svg g.db path.b {
   stroke:#eee!important;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .svg-content-container {
   box-sizing: border-box;
   display: flex;
