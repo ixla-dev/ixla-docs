@@ -848,4 +848,4 @@ Accept: application/json
 Content-Type: application/json
 ```
 
-The system will enter the `Stopping` state, finish the jobs it was running. When all jobs complete it will publish the `WorkflowSchedulerStopped` endpoint with [WorkflowSchedulerStopReason](#workflowschedulerstoppedmessage) set to `ManualStop`
+The system will enter the `Stopping` state, finish the jobs it was running. When all jobs complete it will publish the `WorkflowSchedulerStopped` message with [WorkflowSchedulerStopReason](#workflowschedulerstoppedmessage) set to `ManualStop`
