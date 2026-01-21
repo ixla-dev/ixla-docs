@@ -18,7 +18,6 @@ Issuance can be started from the [WebApp](#issuance-page) or via the [Workflow S
 <br/>
 
 The system will require us to specify: 
-<!-- The interface is pretty self-explanatory. Select the template you want to print and click <span className={"btn"}>START</span> -->
 
 ### Configuration
 
@@ -65,14 +64,11 @@ laser source disabled.
   ... 
   const schedulerState = await this.scheduler.StartWorkflowScheduler({
     workflowSchedulerStartupParamsDto: {
-      WorkflowTypeName : "BOX",
-      StopAfter : -1, // infinite
-      JobTemplateId : 1,  // the id we of the job template we want to use
-      DryRun : false,  // false = laser source disabled
-      TaskAllocationStrategy : null,  // default value. On modular sistes (BOx)
-      NoReset : false,
-      DisableRedPointer : false,
-      SkipEntityUpdates : false
+      StopAfter : -1, // the system keeps polling the __DET__ table for records in 'Waiting' state
+      JobTemplateName : 'my job template name',  // the job template that defines the desired personalization process 
+      DryRun : false,  // Useful for testing, does not personalize cards
+      NoReset : false, // If true skips the transport reset when the scheduler starts
+      SkipEntityUpdates : false // Useful for testing/demos, the system creates mock recurds (personalization fields are set to null)
     }
   }).toPromise();
   ...
@@ -87,13 +83,10 @@ laser source disabled.
   private readonly WorkflowSchedulerService _scheduler; 
   ... 
   WorkflowSchedulerStateDto schedulerSate = await _scheduler.StartWorkflowScheduler(new WorkflowSchedulerStartupParamsDto {
-    WorkflowTypeName = "BOX",
     StopAfter = -1, 
-    JobTemplateId = 1,
+    JobTemplateName = 'my-job-template',
     DryRun = false, 
-    TaskAllocationStrategy = null, 
     NoReset = false,
-    DisableRedPointer = false,
     SkipEntityUpdates = false
   });
   ...
@@ -109,14 +102,11 @@ Host: $BOX_IP_ADDRESS:5000
 Accept: application/json
 
 {
-    "jobTemplateId": 1,
-    "workflowTypeName": "BOX",
+    "jobTemplateName": "my-job-template",
     "dryRun": true,
     "stopAfter" : -1,
     "skipEntityUpdates": true,
-    "noReset": false,
-    "taskAllocationStrategy": "batch", 
-    "disableRedPointer": false
+    "noReset": false
 }
 ```
 

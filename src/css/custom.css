@@ -26,7 +26,10 @@
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
+  color: white;
+  font-weight: bolder;
 }
+
 
 html[data-theme='dark'] :root {
   --ifm-hero-background-color: #222;
@@ -117,4 +120,11 @@ html[data-theme='dark'] svg g.db path.b {
 
 .margin-top-2 {
   margin-top: 16px;
+}
+
+.theme-code-block-highlighted-line {
+  background-color: oklch(20% 0.15 280 / .8) !important;
+  > span {
+    color: oklch(1 0.15 280) !important;
+  }
 }
